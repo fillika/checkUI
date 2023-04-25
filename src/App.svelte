@@ -34,5 +34,6 @@
     overflow-x: hidden;
     overflow-y: scroll;
     border: 1px dashed;
+    margin-bottom: 10px;
   }
 </style>

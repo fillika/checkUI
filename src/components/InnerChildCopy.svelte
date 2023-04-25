@@ -1,5 +1,7 @@
 <script>
   export let c;
+  const tests = [...c.tests.values()];
+
   import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
 </script>
@@ -7,8 +9,8 @@
 <div class="test-block__inner-child">
   <div class="test-block__inner-child-title">{c.name}</div>
 
-  {#each [...c.tests.entries()] as [_, test]}
-    <Test name={test.name} id={test.id} />
+  {#each tests as test}
+    <Test name={test.name} id={test._id} />
   {/each}
 
   {#if c.children.length > 0}

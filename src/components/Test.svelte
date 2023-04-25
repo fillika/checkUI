@@ -1,10 +1,28 @@
 <script>
   export let name;
   export let id;
+
+  import { testIDs } from "../stores/testIDs";
+
+  function onChange(e) {
+    const { checked } = e.target;
+
+    testIDs.update((ids) => {
+      checked ? ids.add(id) : ids.delete(id);
+      return ids;
+    });
+  }
 </script>
 
 <div>
-  <input type="checkbox" value={name} name="" {id} class="test-checkbox" />
+  <input
+    on:change={onChange}
+    type="checkbox"
+    value={name}
+    name={name}
+    id={id}
+    class="test-checkbox"
+  />
   <label for={id}>{name}</label>
 </div>
 

@@ -1,34 +1,20 @@
 <script>
   import GroupResult from "../results/GroupResult.svelte";
+  import { testIDs } from "../../stores/testIDs";
+  import { mapResults } from "../../utils/mapResults";
+  import Buttons from "./Buttons.svelte";
 
   let isDisabled = false;
   let total = 0;
   let success = 0;
   let fail = 0;
-  let results = [];
+  let testsResults = [];
 
-  function mapResults(results) {
-    const m = new Map();
+  let tids;
 
-    results.forEach(({ value }) => {
-      const { name, result } = value;
-      let gName = value.groupName;
-
-      if (gName === null) {
-        gName = "no-group";
-      }
-
-      if (m.has(gName)) {
-        const arr = m.get(gName);
-        arr.push({ name, result });
-        m.set(gName, arr);
-      } else {
-        m.set(gName, [{ name, result }]);
-      }
-    });
-
-    return m;
-  }
+  testIDs.subscribe((ids) => {
+    tids = Array.from(ids);
+  });
 
   function runTests() {
     console.clear();
@@ -36,11 +22,10 @@
     // @ts-ignore
     const { StateManager } = window;
 
-    const testIDs = [];
-    const promises = StateManager.runTests(testIDs);
+    const promises = StateManager.runTests(tids);
 
     Promise.allSettled(promises).then((res) => {
-      results = [...mapResults(res).entries()];
+      testsResults = [...mapResults(res).entries()];
 
       const { tests } = StateManager.getReport();
 
@@ -51,17 +36,19 @@
       isDisabled = false;
     });
   }
+
+  function clearAll() {
+    testIDs.set(new Set());
+
+    document
+      .querySelectorAll("input[type='checkbox']")
+      .forEach((el) => (el.checked = false));
+  }
 </script>
 
 <div class="panel" id="panel">
-  <div class="start-button-wrapper">
-    <button
-      on:mousedown={runTests}
-      disabled={isDisabled}
-      class="start-button"
-      id="start-button">Запуск тестов</button
-    >
-  </div>
+  <Buttons {runTests} {clearAll} {isDisabled} />
+
   <div id="report">
     <div class="statistic-billboard">
       <div class="total">Total: {total}</div>
@@ -71,36 +58,11 @@
   </div>
 </div>
 
-{#each results as [groupName, childrens]}
+{#each testsResults as [groupName, childrens]}
   <GroupResult results={childrens} {groupName} />
 {/each}
 
 <style>
-  .panel {
-    padding: 10px;
-  }
-  .start-button-wrapper {
-    margin-bottom: 10px;
-  }
-
-  .start-button {
-    background-color: #5baaf5;
-    padding: 10px 10px;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .start-button:disabled {
-    background-color: gray;
-    opacity: 0.5;
-  }
-
   .statistic-billboard {
     background-color: #d7d7f7;
     padding: 8px;
