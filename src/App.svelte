@@ -3,8 +3,8 @@
   const groups = [...window.StateManager.getGroups().entries()];
   // @ts-ignore
   const testWithoutGroups = window.StateManager.getTestsWithoutGroup();
-  import TestBlockGroup from "./components/TestBlockGroup.svelte";
-  import TestBlockNoGroup from "./components/TestBlockNoGroup.svelte";
+  import TestBlockGroup from "./components/testBlock/TestBlockGroup.svelte";
+  import TestBlockNoGroup from "./components/testBlock/TestBlockNoGroup.svelte";
   import Panel from "./components/panel/Panel.svelte";
 </script>
 

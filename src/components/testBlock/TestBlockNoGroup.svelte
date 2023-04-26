@@ -1,34 +1,42 @@
 <script>
-  export let groupName;
-  export let childrens;
-
+  import { tick } from "svelte";
   import { slide } from "svelte/transition";
-  import InnerChild from "./InnerChild.svelte";
+  import { testIDs as testsStore } from "../../stores/testIDs";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
 
+  export let childrens;
   let isShown = false;
+  let testIDs = [];
+
+  testsStore.subscribe((ids) => {
+    tick().then(() => (testIDs = Array.from(ids)));
+  });
 
   function onClick() {
     isShown = !isShown;
+
+    if (isShown) {
+      tick().then(() => {
+        testIDs.forEach((id) => {
+          const el = document.getElementById(id);
+          // @ts-ignore
+          if (el) el.checked = true;
+        });
+      });
+    }
   }
 </script>
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle name={groupName} />
+  <TestBlockTitle name={"no-group"} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
-        {#each childrens as { tests, children }}
-          {#each [...tests.values()] as test}
-            <Test name={test.name} id={test._id} />
-          {/each}
-
-          {#each children as child}
-            <InnerChild c={child} />
-          {/each}
+        {#each childrens as test}
+          <Test name={test.name} id={test._id} />
         {/each}
       </div>
     </div>

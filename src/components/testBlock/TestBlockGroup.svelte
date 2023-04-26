@@ -1,13 +1,15 @@
 <script>
   import { tick } from "svelte";
   import { slide } from "svelte/transition";
-  import { testIDs as testsStore } from "../stores/testIDs";
+  import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
+  import { testIDs as testsStore } from "../../stores/testIDs";
 
+  export let groupName;
   export let childrens;
+  let testIDs = [];
   let isShown = false;
-  let testIDs;
 
   testsStore.subscribe((ids) => {
     tick().then(() => (testIDs = Array.from(ids)));
@@ -30,14 +32,19 @@
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-
-  <TestBlockTitle name={"no-group"} />
+  <TestBlockTitle name={groupName} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
-        {#each childrens as test}
-          <Test name={test.name} id={test._id} />
+        {#each childrens as { tests, children }}
+          {#each [...tests.values()] as test}
+            <Test name={test.name} id={test._id} />
+          {/each}
+
+          {#each children as child}
+            <InnerChild c={child} />
+          {/each}
         {/each}
       </div>
     </div>

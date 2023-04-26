@@ -2,7 +2,7 @@
   export let name;
   export let id;
 
-  import { testIDs } from "../stores/testIDs";
+  import { testIDs } from "../../stores/testIDs";
 
   function onChange(e) {
     const { checked } = e.target;
