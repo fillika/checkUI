@@ -11,11 +11,11 @@
 <main>
   <div class="test-form" id="test-form">
     <div class="test-list" id="test-ui">
-      {#each groups as [key, childrens]}
-        <TestBlockGroup {key} {childrens} />
+      {#each groups as [groupName, childrens]}
+        <TestBlockGroup {groupName} {childrens} />
       {/each}
 
-      <TestBlockNoGroup key={"no-group"} childrens={testWithoutGroups} />
+      <TestBlockNoGroup childrens={testWithoutGroups} />
     </div>
 
     <Panel />

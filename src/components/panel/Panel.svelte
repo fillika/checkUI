@@ -1,6 +1,7 @@
 <script>
+  import { tick } from "svelte";
   import GroupResult from "../results/GroupResult.svelte";
-  import { testIDs } from "../../stores/testIDs";
+  import { testIDs as testsStore } from "../../stores/testIDs";
   import { mapResults } from "../../utils/mapResults";
   import Buttons from "./Buttons.svelte";
 
@@ -10,10 +11,10 @@
   let fail = 0;
   let testsResults = [];
 
-  let tids;
+  let testIDs;
 
-  testIDs.subscribe((ids) => {
-    tids = Array.from(ids);
+  testsStore.subscribe((ids) => {
+    tick().then(() => (testIDs = Array.from(ids)));
   });
 
   function runTests() {
@@ -22,7 +23,7 @@
     // @ts-ignore
     const { StateManager } = window;
 
-    const promises = StateManager.runTests(tids);
+    const promises = StateManager.runTests(testIDs);
 
     Promise.allSettled(promises).then((res) => {
       testsResults = [...mapResults(res).entries()];

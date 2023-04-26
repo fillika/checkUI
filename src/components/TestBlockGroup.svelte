@@ -1,5 +1,5 @@
 <script>
-  export let key;
+  export let groupName;
   export let childrens;
 
   import { slide } from "svelte/transition";
@@ -16,7 +16,7 @@
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle {key} />
+  <TestBlockTitle name={groupName} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">

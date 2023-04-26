@@ -1,5 +1,5 @@
 <script>
-  export let key;
+  export let name;
 
   function onChange(e) {
     const { checked } = e.target;
@@ -7,8 +7,8 @@
 </script>
 
 <div class="test-block__title">
-  <input on:change={onChange} class="checkbox-group" type="checkbox" id={key} />
-  <label for={key}>{key}</label>
+  <input on:change={onChange} class="checkbox-group" type="checkbox" id={name} />
+  <label for={name}>{name}</label>
 </div>
 
 <style>
