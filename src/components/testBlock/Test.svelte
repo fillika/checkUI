@@ -1,8 +1,12 @@
 <script>
+  import { testIDs } from "../../stores/testIDs";
+
   export let name;
   export let id;
+  export let checked;
 
-  import { testIDs } from "../../stores/testIDs";
+  $: isChecked = checked;
+  $: onChange({ target: { checked: isChecked } });
 
   function onChange(e) {
     const { checked } = e.target;
@@ -19,8 +23,9 @@
     on:change={onChange}
     type="checkbox"
     value={name}
-    name={name}
-    id={id}
+    {name}
+    {id}
+    checked={isChecked}
     class="test-checkbox"
   />
   <label for={id}>{name}</label>

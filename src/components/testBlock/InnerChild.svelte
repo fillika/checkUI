@@ -1,5 +1,6 @@
 <script>
   export let c;
+  export let checked;
   const tests = [...c.tests.values()];
 
   import InnerChildCopy from "./InnerChildCopy.svelte";
@@ -10,12 +11,12 @@
   <div class="test-block__inner-child-title">{c.name}</div>
 
   {#each tests as test}
-    <Test name={test.name} id={test._id} />
+    <Test {checked} name={test.name} id={test._id} />
   {/each}
 
   {#if c.children.length > 0}
     {#each c.children as child}
-      <InnerChildCopy c={child} />
+      <InnerChildCopy {checked} c={child} />
     {/each}
   {/if}
 </div>

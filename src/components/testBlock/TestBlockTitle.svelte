@@ -1,13 +1,15 @@
 <script>
   export let name;
-
-  function onChange(e) {
-    const { checked } = e.target;
-  }
+  export let onChange;
 </script>
 
 <div class="test-block__title">
-  <input on:change={onChange} class="checkbox-group" type="checkbox" id={name} />
+  <input
+    on:change={onChange}
+    class="checkbox-group"
+    type="checkbox"
+    id={name}
+  />
   <label for={name}>{name}</label>
 </div>
 

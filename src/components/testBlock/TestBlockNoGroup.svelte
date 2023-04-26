@@ -8,6 +8,7 @@
   export let childrens;
   let isShown = false;
   let testIDs = [];
+  let checked = false;
 
   testsStore.subscribe((ids) => {
     tick().then(() => (testIDs = Array.from(ids)));
@@ -26,17 +27,21 @@
       });
     }
   }
+
+  function onChange(e) {
+    checked = e.target.checked;
+  }
 </script>
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle name={"no-group"} />
+  <TestBlockTitle {onChange} name={"no-group"} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
         {#each childrens as test}
-          <Test name={test.name} id={test._id} />
+          <Test {checked} name={test.name} id={test._id} />
         {/each}
       </div>
     </div>
