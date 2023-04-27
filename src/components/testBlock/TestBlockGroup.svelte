@@ -9,8 +9,8 @@
   export let groupName;
   export let childrens;
   let testIDs = [];
-  let isShown = false;
-  let checked = false;
+  let isShown = true;
+  let checked = true;
 
   testsStore.subscribe((ids) => {
     tick().then(() => (testIDs = Array.from(ids)));

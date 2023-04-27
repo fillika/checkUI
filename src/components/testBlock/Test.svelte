@@ -5,8 +5,7 @@
   export let id;
   export let checked;
 
-  $: isChecked = checked;
-  $: onChange({ target: { checked: isChecked } });
+  $: onChange({ target: { checked: checked } });
 
   function onChange(e) {
     const { checked } = e.target;
@@ -25,7 +24,7 @@
     value={name}
     {name}
     {id}
-    checked={isChecked}
+    {checked}
     class="test-checkbox"
   />
   <label for={id}>{name}</label>

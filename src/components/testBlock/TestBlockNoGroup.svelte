@@ -6,9 +6,9 @@
   import TestBlockTitle from "./TestBlockTitle.svelte";
 
   export let childrens;
-  let isShown = false;
+  let isShown = true;
   let testIDs = [];
-  let checked = false;
+  let checked = true;
 
   testsStore.subscribe((ids) => {
     tick().then(() => (testIDs = Array.from(ids)));
