@@ -31,13 +31,13 @@
   }
 
   function onChange(e) {
-    checked = e.target.checked;
+    checked = e.detail;
   }
 </script>
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle {onChange} name={groupName} />
+  <TestBlockTitle on:change={onChange} name={groupName} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">

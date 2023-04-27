@@ -1,6 +1,13 @@
 <script>
+  import { createEventDispatcher } from "svelte";
+
   export let name;
-  export let onChange;
+
+  const dispatcher = createEventDispatcher();
+
+  function onChange(e) {
+    dispatcher("change", e.target.checked);
+  }
 </script>
 
 <div class="test-block__title">

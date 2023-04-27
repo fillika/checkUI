@@ -6,8 +6,8 @@
   import TestBlockTitle from "./TestBlockTitle.svelte";
 
   export let childrens;
-  let isShown = true;
   let testIDs = [];
+  let isShown = true;
   let checked = true;
 
   testsStore.subscribe((ids) => {
@@ -29,13 +29,13 @@
   }
 
   function onChange(e) {
-    checked = e.target.checked;
+    checked = e.detail;
   }
 </script>
 
 <div class="test-block">
   <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle {onChange} name={"no-group"} />
+  <TestBlockTitle on:change={onChange} name={"no-group"} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
