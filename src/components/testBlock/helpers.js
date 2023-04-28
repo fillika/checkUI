@@ -18,9 +18,9 @@ export function onChangeHandler(e, checkedTestIDs) {
     });
 }
 
-export function updateAfterAllTestOnChanged(isAllTestChecked, checkedTestIDs, allBlockIDs) {
+export function updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, allBlockIDs) {
     testIDs.update((ids) => {
-        isAllTestChecked
+        isTestsGroupChecked
             ? (ids = new Set([...ids, ...checkedTestIDs]))
             : allBlockIDs.forEach((id) => ids.delete(id));
 

@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
 
   export let name;
-  export let isAllTestChecked;
+  export let isTestsGroupChecked;
 
   const dispatcher = createEventDispatcher();
 
@@ -20,7 +20,7 @@
     on:change={onChange}
     class="checkbox-group"
     type="checkbox"
-    checked={isAllTestChecked}
+    checked={isTestsGroupChecked}
     id={name}
   />
   <label for={name}>{name}</label>

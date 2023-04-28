@@ -1,54 +1,62 @@
 <script>
-  import { tick } from "svelte";
   import { slide } from "svelte/transition";
   import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
-  import { testIDs as testsStore } from "../../stores/testIDs";
+  import {
+    onChangeHandler,
+    onMountHandler,
+    updateAfterAllTestOnChanged,
+  } from "./helpers";
 
-  export let groupName;
   export let childrens;
-  let testIDs = [];
+  export let groupName;
   let isShown = true;
-  let checked = true;
+  let checkedTestIDs = new Set();
+  let allBlockIDs = new Set();
+  let isTestsGroupChecked;
 
-  testsStore.subscribe((ids) => {
-    tick().then(() => (testIDs = Array.from(ids)));
-  });
+  $: updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, allBlockIDs);
 
-  function onClick() {
-    isShown = !isShown;
+  function onChangeAllTestHandler(e) {
+    isTestsGroupChecked = e.detail;
 
-    if (isShown) {
-      tick().then(() => {
-        testIDs.forEach((id) => {
-          const el = document.getElementById(id);
-          // @ts-ignore
-          if (el) el.checked = true;
-        });
-      });
-    }
-  }
-
-  function onChange(e) {
-    checked = e.detail;
+    isTestsGroupChecked
+      ? (checkedTestIDs = new Set(allBlockIDs))
+      : (checkedTestIDs = new Set());
   }
 </script>
 
 <div class="test-block">
-  <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle on:change={onChange} name={groupName} />
+  <div on:mousedown={() => (isShown = !isShown)} class="test-block__toggle" />
+
+  <TestBlockTitle
+    on:change={onChangeAllTestHandler}
+    {isTestsGroupChecked}
+    name={groupName}
+  />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
         {#each childrens as { tests, children }}
           {#each [...tests.values()] as test}
-            <Test {checked} name={test.name} id={test._id} />
+            <Test
+              on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
+              on:change={(e) => onChangeHandler(e, checkedTestIDs)}
+              checked={checkedTestIDs.has(test._id)}
+              name={test.name}
+              id={test._id}
+            />
           {/each}
 
           {#each children as child}
-            <InnerChild {checked} c={child} />
+            <InnerChild
+              {checkedTestIDs}
+              on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
+              on:change={(e) => onChangeHandler(e, checkedTestIDs)}
+              c={child}
+            />
           {/each}
         {/each}
       </div>

@@ -12,14 +12,14 @@
   let isShown = true;
   let checkedTestIDs = new Set();
   let allBlockIDs = new Set();
-  let isAllTestChecked;
+  let isTestsGroupChecked;
 
-  $: updateAfterAllTestOnChanged(isAllTestChecked, checkedTestIDs, allBlockIDs);
+  $: updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, allBlockIDs);
 
   function onChangeAllTestHandler(e) {
-    isAllTestChecked = e.detail;
+    isTestsGroupChecked = e.detail;
 
-    isAllTestChecked
+    isTestsGroupChecked
       ? (checkedTestIDs = new Set(allBlockIDs))
       : (checkedTestIDs = new Set());
   }
@@ -30,7 +30,7 @@
 
   <TestBlockTitle
     on:change={onChangeAllTestHandler}
-    {isAllTestChecked}
+    {isTestsGroupChecked}
     name={"no-group"}
   />
 
