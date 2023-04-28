@@ -1,13 +1,18 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   export let name;
+  export let isAllTestChecked;
 
   const dispatcher = createEventDispatcher();
 
   function onChange(e) {
     dispatcher("change", e.target.checked);
   }
+
+  onMount(() => {
+    dispatcher("change", true);
+  });
 </script>
 
 <div class="test-block__title">
@@ -15,6 +20,7 @@
     on:change={onChange}
     class="checkbox-group"
     type="checkbox"
+    checked={isAllTestChecked}
     id={name}
   />
   <label for={name}>{name}</label>

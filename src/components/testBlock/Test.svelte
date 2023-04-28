@@ -1,11 +1,11 @@
 <script>
+  import { createEventDispatcher, onMount } from "svelte";
   import { testIDs } from "../../stores/testIDs";
 
   export let name;
   export let id;
   export let checked;
-
-  $: onChange({ target: { checked: checked } });
+  const dispatcher = createEventDispatcher();
 
   function onChange(e) {
     const { checked } = e.target;
@@ -14,7 +14,11 @@
       checked ? ids.add(id) : ids.delete(id);
       return ids;
     });
+
+    dispatcher("change", { checked, id });
   }
+
+  onMount(() => dispatcher("mount", { id }));
 </script>
 
 <div>

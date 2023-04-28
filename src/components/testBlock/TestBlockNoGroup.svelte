@@ -1,47 +1,50 @@
 <script>
-  import { tick } from "svelte";
   import { slide } from "svelte/transition";
-  import { testIDs as testsStore } from "../../stores/testIDs";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
+  import {
+    onMountHandler,
+    onChangeHandler,
+    updateAfterAllTestOnChanged,
+  } from "./helpers";
 
   export let childrens;
-  let testIDs = [];
   let isShown = true;
-  let checked = true;
+  let checkedTestIDs = new Set();
+  let allBlockIDs = new Set();
+  let isAllTestChecked;
 
-  testsStore.subscribe((ids) => {
-    tick().then(() => (testIDs = Array.from(ids)));
-  });
+  $: updateAfterAllTestOnChanged(isAllTestChecked, checkedTestIDs, allBlockIDs);
 
-  function onClick() {
-    isShown = !isShown;
+  function onChangeAllTestHandler(e) {
+    isAllTestChecked = e.detail;
 
-    if (isShown) {
-      tick().then(() => {
-        testIDs.forEach((id) => {
-          const el = document.getElementById(id);
-          // @ts-ignore
-          if (el) el.checked = true;
-        });
-      });
-    }
-  }
-
-  function onChange(e) {
-    checked = e.detail;
+    isAllTestChecked
+      ? (checkedTestIDs = new Set(allBlockIDs))
+      : (checkedTestIDs = new Set());
   }
 </script>
 
 <div class="test-block">
-  <div on:mousedown={onClick} class="test-block__toggle" />
-  <TestBlockTitle on:change={onChange} name={"no-group"} />
+  <div on:mousedown={() => (isShown = !isShown)} class="test-block__toggle" />
+
+  <TestBlockTitle
+    on:change={onChangeAllTestHandler}
+    {isAllTestChecked}
+    name={"no-group"}
+  />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
         {#each childrens as test}
-          <Test {checked} name={test.name} id={test._id} />
+          <Test
+            on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
+            on:change={(e) => onChangeHandler(e, checkedTestIDs)}
+            checked={checkedTestIDs.has(test._id)}
+            name={test.name}
+            id={test._id}
+          />
         {/each}
       </div>
     </div>
