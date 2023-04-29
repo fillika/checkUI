@@ -1,8 +1,8 @@
 <script>
   import { createEventDispatcher, onMount } from "svelte";
+  import { checkedGroup } from "../../stores/checkedGroup";
 
   export let name;
-  export let isTestsGroupChecked;
 
   const dispatcher = createEventDispatcher();
 
@@ -20,7 +20,7 @@
     on:change={onChange}
     class="checkbox-group"
     type="checkbox"
-    checked={isTestsGroupChecked}
+    checked={$checkedGroup.has(name)}
     id={name}
   />
   <label for={name}>{name}</label>

@@ -5,6 +5,7 @@
   import WarningMsg from "./components/results/WarningMsg.svelte";
   import TestList from "./components/testBlock/TestList.svelte";
   import { testIDs as testsStore } from "./stores/testIDs";
+  import { checkedGroup } from "./stores/checkedGroup";
   import { stats } from "./stores/stats";
   import { mapResults } from "./utils/mapResults";
 
@@ -44,7 +45,8 @@
   }
 
   function clearAll() {
-    testsStore.update((ids) => new Set());
+    testsStore.update(() => new Set());
+    checkedGroup.update(() => new Set());
   }
 
   function crearBeforeRun() {

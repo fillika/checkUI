@@ -3,6 +3,7 @@
   import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
+  import { checkedGroup } from "../../stores/checkedGroup";
   import {
     onChangeHandler,
     onMountHandler,
@@ -28,17 +29,18 @@
     isTestsGroupChecked
       ? (checkedTestIDs = new Set(groupTestIDs))
       : (checkedTestIDs = new Set());
+
+    checkedGroup.update((prev) => {
+      isTestsGroupChecked ? prev.add(groupName) : prev.delete(groupName);
+      return prev;
+    });
   }
 </script>
 
 <div class="test-block">
   <div on:mousedown={() => (isShown = !isShown)} class="test-block__toggle" />
 
-  <TestBlockTitle
-    on:change={onChangeAllTestHandler}
-    {isTestsGroupChecked}
-    name={groupName}
-  />
+  <TestBlockTitle on:change={onChangeAllTestHandler} name={groupName} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
