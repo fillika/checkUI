@@ -24,16 +24,16 @@
       return prev;
     });
   });
-
-  checkedGroups.subscribe((checkedGroups) => {
-    updateAfterAllTestOnChanged(checkedGroups.has(groupName), groupTestIDs);
-  });
 </script>
 
 <div class="test-block">
   <div on:mousedown={() => (isShown = !isShown)} class="test-block__toggle" />
 
-  <TestBlockTitle name={groupName} />
+  <TestBlockTitle
+    on:change={() =>
+      updateAfterAllTestOnChanged($checkedGroups.has(groupName), groupTestIDs)}
+    name={groupName}
+  />
 
   {#if isShown}
     <div transition:slide class="test-block__content">

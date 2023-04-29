@@ -1,13 +1,18 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { checkedGroups } from "../../stores/checkedGroups";
 
   export let name;
+
+  const dispatcher = createEventDispatcher();
 
   function onChangeHandler(e) {
     checkedGroups.update((prev) => {
       e.target.checked ? prev.add(name) : prev.delete(name);
       return prev;
     });
+
+    dispatcher("change");
   }
 </script>
 
