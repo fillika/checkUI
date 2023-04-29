@@ -2,7 +2,6 @@
   export let c;
   const tests = [...c.tests.values()];
 
-  import InnerChildCopy from "./InnerChildCopy.svelte";
   import Test from "./Test.svelte";
 </script>
 
@@ -20,7 +19,7 @@
 
   {#if c.children.length > 0}
     {#each c.children as child}
-      <InnerChildCopy on:mount on:change c={child} />
+      <svelte:self on:mount on:change c={child} />
     {/each}
   {/if}
 </div>

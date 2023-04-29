@@ -44,7 +44,7 @@
     <div transition:slide class="test-block__content">
       <div class="test-block__content-inner-wrapper">
         {#each childrens as { tests, children }}
-          {#each [...tests.values()] as test}
+          {#each Array.from(tests.values()) as test}
             <Test
               on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
