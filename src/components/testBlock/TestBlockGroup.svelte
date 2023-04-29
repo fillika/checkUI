@@ -57,7 +57,7 @@
             <InnerChild
               on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
-              c={child}
+              {child}
             />
           {/each}
         {/each}

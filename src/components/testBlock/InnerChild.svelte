@@ -1,27 +1,20 @@
 <script>
-  export let c;
-  const tests = [...c.tests.values()];
+  export let child;
+  const tests = [...child.tests.values()];
 
   import Test from "./Test.svelte";
 </script>
 
 <div class="test-block__inner-child">
-  <div class="test-block__inner-child-title">{c.name}</div>
+  <div class="test-block__inner-child-title">{child.name}</div>
 
   {#each tests as test}
-    <Test
-      on:mount
-      on:change
-      name={test.name}
-      id={test._id}
-    />
+    <Test on:mount on:change name={test.name} id={test._id} />
   {/each}
 
-  {#if c.children.length > 0}
-    {#each c.children as child}
-      <svelte:self on:mount on:change c={child} />
-    {/each}
-  {/if}
+  {#each child.children as ch}
+    <svelte:self on:mount on:change child={ch} />
+  {/each}
 </div>
 
 <style>
