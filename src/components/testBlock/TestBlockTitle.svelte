@@ -1,23 +1,19 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
   import { checkedGroups } from "../../stores/checkedGroups";
 
   export let name;
 
-  const dispatcher = createEventDispatcher();
-
-  function onChange(e) {
-    dispatcher("change", e.target.checked);
+  function onChangeHandler(e) {
+    checkedGroups.update((prev) => {
+      e.target.checked ? prev.add(name) : prev.delete(name);
+      return prev;
+    });
   }
-
-  onMount(() => {
-    dispatcher("change", true);
-  });
 </script>
 
 <div class="test-block__title">
   <input
-    on:change={onChange}
+    on:change={onChangeHandler}
     class="checkbox-group"
     type="checkbox"
     checked={$checkedGroups.has(name)}

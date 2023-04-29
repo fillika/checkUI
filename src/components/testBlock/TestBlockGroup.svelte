@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { slide } from "svelte/transition";
   import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
@@ -9,34 +10,30 @@
     onChangeHandler,
     updateAfterAllTestOnChanged,
   } from "./helpers";
-  import { onMount } from "svelte";
 
   export let childrens;
   export let groupName;
   let isShown = false;
   let groupTestIDs = new Set();
-  let isTestsGroupChecked = true;
 
   onMount(() => {
     collectTestIDsInGroup(childrens, groupTestIDs);
-  });
-
-  $: updateAfterAllTestOnChanged(isTestsGroupChecked, groupTestIDs);
-
-  function onChangeAllTestHandler(e) {
-    isTestsGroupChecked = e.detail;
 
     checkedGroups.update((prev) => {
-      isTestsGroupChecked ? prev.add(groupName) : prev.delete(groupName);
+      prev.add(groupName);
       return prev;
     });
-  }
+  });
+
+  checkedGroups.subscribe((checkedGroups) => {
+    updateAfterAllTestOnChanged(checkedGroups.has(groupName), groupTestIDs);
+  });
 </script>
 
 <div class="test-block">
   <div on:mousedown={() => (isShown = !isShown)} class="test-block__toggle" />
 
-  <TestBlockTitle on:change={onChangeAllTestHandler} name={groupName} />
+  <TestBlockTitle name={groupName} />
 
   {#if isShown}
     <div transition:slide class="test-block__content">
