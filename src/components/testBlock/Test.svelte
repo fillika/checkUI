@@ -4,7 +4,6 @@
 
   export let name;
   export let id;
-  export let checked;
   const dispatcher = createEventDispatcher();
 
   function onChange(e) {
@@ -28,7 +27,7 @@
     value={name}
     {name}
     {id}
-    {checked}
+    checked={$testIDs.has(id)}
     class="test-checkbox"
   />
   <label for={id}>{name}</label>

@@ -39,11 +39,7 @@
   }
 
   function clearAll() {
-    testIDs.set(new Set());
-
-    document
-      .querySelectorAll("input[type='checkbox']")
-      .forEach((el) => (el.checked = false));
+    testsStore.update((ids) => new Set());
   }
 </script>
 

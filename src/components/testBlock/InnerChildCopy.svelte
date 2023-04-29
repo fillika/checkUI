@@ -1,6 +1,5 @@
 <script>
   export let c;
-  export let checkedTestIDs = new Set();
   const tests = [...c.tests.values()];
 
   import InnerChild from "./InnerChild.svelte";
@@ -14,7 +13,6 @@
     <Test
       on:mount
       on:change
-      checked={checkedTestIDs.has(test._id)}
       name={test.name}
       id={test._id}
     />
@@ -22,7 +20,7 @@
 
   {#if c.children.length > 0}
     {#each c.children as child}
-      <InnerChild on:mount on:change {checkedTestIDs} c={child} />
+      <InnerChild on:mount on:change c={child} />
     {/each}
   {/if}
 </div>

@@ -16,7 +16,11 @@
   let allBlockIDs = new Set();
   let isTestsGroupChecked;
 
-  $: updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, allBlockIDs);
+  $: updateAfterAllTestOnChanged(
+    isTestsGroupChecked,
+    checkedTestIDs,
+    allBlockIDs
+  );
 
   function onChangeAllTestHandler(e) {
     isTestsGroupChecked = e.detail;
@@ -44,7 +48,6 @@
             <Test
               on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
-              checked={checkedTestIDs.has(test._id)}
               name={test.name}
               id={test._id}
             />
@@ -52,7 +55,6 @@
 
           {#each children as child}
             <InnerChild
-              {checkedTestIDs}
               on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
               c={child}
