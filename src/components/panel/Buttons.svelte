@@ -12,8 +12,11 @@
     id="start-button">Запуск тестов</button
   >
 
-  <button on:mousedown={clearAll} class="button clear-button" id="clear-button"
-    >Очистить все</button
+  <button
+    on:mousedown={clearAll}
+    disabled={isDisabled}
+    class="button clear-button"
+    id="clear-button">Очистить все</button
   >
 </div>
 

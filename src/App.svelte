@@ -1,39 +1,78 @@
 <script>
-  // @ts-ignore
-  const groups = [...window.StateManager.getGroups().entries()];
-  // @ts-ignore
-  const testWithoutGroups = window.StateManager.getTestsWithoutGroup();
-  import TestBlockGroup from "./components/testBlock/TestBlockGroup.svelte";
-  import TestBlockNoGroup from "./components/testBlock/TestBlockNoGroup.svelte";
   import Panel from "./components/panel/Panel.svelte";
+  import Report from "./components/report/Report.svelte";
+  import ProcessBar from "./components/results/ProcessBar.svelte";
+  import WarningMsg from "./components/results/WarningMsg.svelte";
+  import TestList from "./components/testBlock/TestList.svelte";
+  import { testIDs as testsStore } from "./stores/testIDs";
+  import { stats } from "./stores/stats";
+  import { mapResults } from "./utils/mapResults";
+
+  let isDisabled = false;
+  let testsResults = [];
+  let warningMessage = null;
+  let inProcess = false;
+
+  function runTests() {
+    crearBeforeRun();
+    // @ts-ignore
+    const sm = window.StateManager;
+
+    if ($testsStore.size === 0) {
+      warningMessage = "Please select at least one test";
+      isDisabled = false;
+      return;
+    }
+
+    inProcess = true;
+
+    Promise.allSettled(sm.runTests(Array.from($testsStore))).then((res) => {
+      inProcess = false;
+      testsResults = [...mapResults(res).entries()];
+
+      const { tests } = sm.getReport();
+
+      stats.update((s) => {
+        s.total = tests.total;
+        s.passed = tests.success;
+        s.failed = tests.fail;
+        return s;
+      });
+
+      isDisabled = false;
+    });
+  }
+
+  function clearAll() {
+    testsStore.update((ids) => new Set());
+  }
+
+  function crearBeforeRun() {
+    console.clear();
+    testsResults.length = 0;
+    warningMessage = null;
+    isDisabled = true;
+    inProcess = false;
+
+    stats.update((s) => {
+      s.total = 0;
+      s.passed = 0;
+      s.failed = 0;
+      return s;
+    });
+  }
 </script>
 
 <main>
-  <div class="test-form" id="test-form">
-    <div class="test-list" id="test-ui">
-      {#each groups as [groupName, childrens]}
-        <TestBlockGroup {groupName} {childrens} />
-      {/each}
+  <TestList />
 
-      <TestBlockNoGroup childrens={testWithoutGroups} />
-    </div>
+  <Panel {clearAll} {runTests} {isDisabled} />
 
-    <Panel />
-  </div>
+  {#if warningMessage !== null}
+    <WarningMsg {warningMessage} />
+  {:else if inProcess}
+    <ProcessBar />
+  {:else}
+    <Report {testsResults} />
+  {/if}
 </main>
-
-<style>
-  .test-form {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  .test-list {
-    height: 500px;
-    padding: 10px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    border: 1px dashed;
-    margin-bottom: 10px;
-  }
-</style>
