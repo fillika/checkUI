@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { testIDs } from "../../stores/testIDs";
 
   export let name;
@@ -16,8 +16,6 @@
 
     dispatcher("change", { checked, id });
   }
-
-  onMount(() => dispatcher("mount", { id }));
 </script>
 
 <div>

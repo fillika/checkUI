@@ -5,30 +5,26 @@
   import TestBlockTitle from "./TestBlockTitle.svelte";
   import { checkedGroup } from "../../stores/checkedGroup";
   import {
+    collectTestIDsInGroup,
     onChangeHandler,
-    onMountHandler,
     updateAfterAllTestOnChanged,
   } from "./helpers";
+  import { onMount } from "svelte";
 
   export let childrens;
   export let groupName;
-  let isShown = true;
-  let checkedTestIDs = new Set();
+  let isShown = false;
   let groupTestIDs = new Set();
-  let isTestsGroupChecked;
+  let isTestsGroupChecked = true;
 
-  $: updateAfterAllTestOnChanged(
-    isTestsGroupChecked,
-    checkedTestIDs,
-    groupTestIDs
-  );
+  onMount(() => {
+    collectTestIDsInGroup(childrens, groupTestIDs);
+  });
+
+  $: updateAfterAllTestOnChanged(isTestsGroupChecked, groupTestIDs);
 
   function onChangeAllTestHandler(e) {
     isTestsGroupChecked = e.detail;
-
-    isTestsGroupChecked
-      ? (checkedTestIDs = new Set(groupTestIDs))
-      : (checkedTestIDs = new Set());
 
     checkedGroup.update((prev) => {
       isTestsGroupChecked ? prev.add(groupName) : prev.delete(groupName);
@@ -47,20 +43,11 @@
       <div class="test-block__content-inner-wrapper">
         {#each childrens as { tests, children }}
           {#each Array.from(tests.values()) as test}
-            <Test
-              on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
-              on:change={(e) => onChangeHandler(e, checkedTestIDs)}
-              name={test.name}
-              id={test._id}
-            />
+            <Test on:change={onChangeHandler} name={test.name} id={test._id} />
           {/each}
 
           {#each children as child}
-            <InnerChild
-              on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
-              on:change={(e) => onChangeHandler(e, checkedTestIDs)}
-              {child}
-            />
+            <InnerChild on:change={onChangeHandler} {child} />
           {/each}
         {/each}
       </div>

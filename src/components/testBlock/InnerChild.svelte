@@ -9,11 +9,11 @@
   <div class="test-block__inner-child-title">{child.name}</div>
 
   {#each tests as test}
-    <Test on:mount on:change name={test.name} id={test._id} />
+    <Test on:change name={test.name} id={test._id} />
   {/each}
 
   {#each child.children as ch}
-    <svelte:self on:mount on:change child={ch} />
+    <svelte:self on:change child={ch} />
   {/each}
 </div>
 
