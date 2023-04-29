@@ -47,7 +47,8 @@
     background-color: #f55b5b;
   }
 
-  .start-button:disabled {
+  .start-button:disabled, 
+  .clear-button:disabled {
     background-color: gray;
     opacity: 0.5;
   }

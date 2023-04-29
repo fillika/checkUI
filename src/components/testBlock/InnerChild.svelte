@@ -19,8 +19,9 @@
 
 <style>
   .test-block__inner-child {
-    padding: 5px;
+    padding: 10px 10px 5px;
     border: 1px solid gray;
+    margin-top: 5px;
   }
 
   .test-block__inner-child-title {
