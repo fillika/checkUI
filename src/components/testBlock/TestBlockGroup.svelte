@@ -3,7 +3,7 @@
   import InnerChild from "./InnerChild.svelte";
   import Test from "./Test.svelte";
   import TestBlockTitle from "./TestBlockTitle.svelte";
-  import { checkedGroup } from "../../stores/checkedGroup";
+  import { checkedGroups } from "../../stores/checkedGroups";
   import {
     collectTestIDsInGroup,
     onChangeHandler,
@@ -26,7 +26,7 @@
   function onChangeAllTestHandler(e) {
     isTestsGroupChecked = e.detail;
 
-    checkedGroup.update((prev) => {
+    checkedGroups.update((prev) => {
       isTestsGroupChecked ? prev.add(groupName) : prev.delete(groupName);
       return prev;
     });
