@@ -13,20 +13,20 @@
   export let groupName;
   let isShown = true;
   let checkedTestIDs = new Set();
-  let allBlockIDs = new Set();
+  let groupTestIDs = new Set();
   let isTestsGroupChecked;
 
   $: updateAfterAllTestOnChanged(
     isTestsGroupChecked,
     checkedTestIDs,
-    allBlockIDs
+    groupTestIDs
   );
 
   function onChangeAllTestHandler(e) {
     isTestsGroupChecked = e.detail;
 
     isTestsGroupChecked
-      ? (checkedTestIDs = new Set(allBlockIDs))
+      ? (checkedTestIDs = new Set(groupTestIDs))
       : (checkedTestIDs = new Set());
   }
 </script>
@@ -46,7 +46,7 @@
         {#each childrens as { tests, children }}
           {#each [...tests.values()] as test}
             <Test
-              on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
+              on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
               name={test.name}
               id={test._id}
@@ -55,7 +55,7 @@
 
           {#each children as child}
             <InnerChild
-              on:mount={(e) => onMountHandler(e, allBlockIDs, checkedTestIDs)}
+              on:mount={(e) => onMountHandler(e, groupTestIDs, checkedTestIDs)}
               on:change={(e) => onChangeHandler(e, checkedTestIDs)}
               c={child}
             />

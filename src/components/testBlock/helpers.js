@@ -1,9 +1,9 @@
 import { testIDs } from "../../stores/testIDs";
 
-export function onMountHandler(e, allBlockIDs, checkedTestIDs) {
+export function onMountHandler(e, groupTestIDs, checkedTestIDs) {
     const { id } = e.detail;
 
-    allBlockIDs.add(id);
+    groupTestIDs.add(id);
     checkedTestIDs.add(id);
 }
 
@@ -18,11 +18,11 @@ export function onChangeHandler(e, checkedTestIDs) {
     });
 }
 
-export function updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, allBlockIDs) {
+export function updateAfterAllTestOnChanged(isTestsGroupChecked, checkedTestIDs, groupTestIDs) {
     testIDs.update((ids) => {
         isTestsGroupChecked
             ? (ids = new Set([...ids, ...checkedTestIDs]))
-            : allBlockIDs.forEach((id) => ids.delete(id));
+            : groupTestIDs.forEach((id) => ids.delete(id));
 
         return ids;
     });
